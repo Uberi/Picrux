@@ -60,10 +60,13 @@ def add_entry(master, description, remaining): # add a new entry to the bottom o
     Button(frame, text=remaining).pack(anchor=SE, padx=5, pady=5)
 
 def expand_entry(event):
-    print("test")
+    widget = event.widget
+    if widget.winfo_class() != "TFrame": # child entry selected
+        widget = widget.nametowidget(widget.winfo_parent()) # ensure frame is selected
+    print(widget.winfo_children()[0]["text"])
 
 settings = path.join(path.dirname(path.realpath(__file__)), "settings.conf")
-font = "Segoe UI" #wip: check if font is available
+font = "Arial" #wip: check if font is available
 
 entries = load()
 
