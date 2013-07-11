@@ -2,12 +2,11 @@
 """
 Copyright (c) 2003-2007  Gustavo Niemeyer <gustavo@niemeyer.net>
 
-This module offers extensions to the standard Python
+This module offers extensions to the standard python 2.3+
 datetime module.
 """
-from __future__ import unicode_literals
-__license__ = "Simplified BSD"
-
+__author__ = "Gustavo Niemeyer <gustavo@niemeyer.net>"
+__license__ = "PSF License"
 
 import datetime
 import string
@@ -20,8 +19,6 @@ try:
     from io import StringIO
 except ImportError:
     from io import StringIO
-
-from six import text_type, binary_type, integer_types
 
 from . import relativedelta
 from . import tz
@@ -43,7 +40,7 @@ __all__ = ["parse", "parserinfo"]
 class _timelex(object):
 
     def __init__(self, instream):
-        if isinstance(instream, text_type):
+        if isinstance(instream, str):
             instream = StringIO(instream)
         self.instream = instream
         self.wordchars = ('abcdfeghijklmnopqrstuvwxyz'
@@ -143,9 +140,6 @@ class _timelex(object):
             raise StopIteration
         return token
 
-    def next(self):
-        return self.__next__()  # Python 2.x support
-
     def split(cls, s):
         return list(cls(s))
     split = classmethod(split)
@@ -191,7 +185,7 @@ class parserinfo(object):
                 ("Jun", "June"),
                 ("Jul", "July"),
                 ("Aug", "August"),
-                ("Sep", "Sept", "September"),
+                ("Sep", "September"),
                 ("Oct", "October"),
                 ("Nov", "November"),
                 ("Dec", "December")]
@@ -325,9 +319,9 @@ class parser(object):
                     tzdata = tzinfos.get(res.tzname)
                 if isinstance(tzdata, datetime.tzinfo):
                     tzinfo = tzdata
-                elif isinstance(tzdata, text_type):
+                elif isinstance(tzdata, str):
                     tzinfo = tz.tzstr(tzdata)
-                elif isinstance(tzdata, integer_types):
+                elif isinstance(tzdata, int):
                     tzinfo = tz.tzoffset(res.tzname, tzdata)
                 else:
                     raise ValueError("offset must be tzinfo subclass, " \
@@ -448,17 +442,6 @@ class parser(object):
                                     newidx = info.hms(l[i])
                                     if newidx is not None:
                                         idx = newidx
-                    elif i == len_l and l[i-2] == ' ' and info.hms(l[i-3]) is not None:
-                        # X h MM or X m SS
-                        idx = info.hms(l[i-3]) + 1
-                        if idx == 1:
-                            res.minute = int(value)
-                            if value%1:
-                                res.second = int(60*(value%1))
-                            elif idx == 2:
-                                res.second, res.microsecond = \
-                                        _parsems(value_repr)
-                                i += 1
                     elif i+1 < len_l and l[i] == ':':
                         # HH:MM[:SS[.ss]]
                         res.hour = int(value)
@@ -603,7 +586,7 @@ class parser(object):
 
                 # Check for a numbered timezone
                 if res.hour is not None and l[i] in ('+', '-'):
-                    signal = (-1, 1)[l[i] == '+']
+                    signal = (-1,1)[l[i] == '+']
                     i += 1
                     len_li = len(l[i])
                     if len_li == 4:
@@ -709,11 +692,6 @@ class parser(object):
 
 DEFAULTPARSER = parser()
 def parse(timestr, parserinfo=None, **kwargs):
-    # Python 2.x support: datetimes return their string presentation as
-    # bytes in 2.x and unicode in 3.x, so it's reasonable to expect that
-    # the parser will get both kinds. Internally we use unicode only.
-    if isinstance(timestr, binary_type):
-        timestr = timestr.decode()
     if parserinfo:
         return parser(parserinfo).parse(timestr, **kwargs)
     else:
@@ -766,7 +744,7 @@ class _tzparser(object):
                         if l[i] in ('+', '-'):
                             # Yes, that's right.  See the TZ variable
                             # documentation.
-                            signal = (1, -1)[l[i] == '+']
+                            signal = (1,-1)[l[i] == '+']
                             i += 1
                         else:
                             signal = -1
@@ -824,15 +802,15 @@ class _tzparser(object):
                     x.time = int(l[i])
                     i += 2
                 if i < len_l:
-                    if l[i] in ('-', '+'):
-                        signal = (-1, 1)[l[i] == "+"]
+                    if l[i] in ('-','+'):
+                        signal = (-1,1)[l[i] == "+"]
                         i += 1
                     else:
                         signal = 1
                     res.dstoffset = (res.stdoffset+int(l[i]))*signal
             elif (l.count(',') == 2 and l[i:].count('/') <= 2 and
-                  not [y for x in l[i:] if x not in (',', '/', 'J', 'M',
-                                                     '.', '-', ':')
+                  not [y for x in l[i:] if x not in (',','/','J','M',
+                                                     '.','-',':')
                          for y in x if y not in "0123456789"]):
                 for x in (res.start, res.end):
                     if l[i] == 'J':

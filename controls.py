@@ -1,23 +1,6 @@
 from tkinter import *
 from tkinter.ttk import *
 
-def bind_tag(tag, *widgets):
-    """Bind a given tag as the first bindtag for each given widget"""
-    for widget in widgets:
-        widget.bindtags((tag,) + widget.bindtags())
-
-def entry_active(event): # called upon hovering or focusing on an entry
-    event.widget.config(style="Active.Entry.TFrame") # set frame as active
-    children = event.widget.winfo_children()
-    label = [x for x in children if x.winfo_class() == "TLabel"][0] # find label in the frame
-    label.config(style="Active.Entry.TLabel") # set label as active
-
-def entry_inactive(event): # called upon stopping of hovering or focusing on an entry
-    event.widget.config(style="Entry.TFrame") # set frame as active
-    children = event.widget.winfo_children()
-    label = [x for x in children if x.winfo_class() == "TLabel"][0] # find label in the frame
-    label.config(style="Entry.TLabel") # set label as active
-
 class VerticalScrolledFrame(Frame):
     """A pure Tkinter scrollable frame that actually works!
 

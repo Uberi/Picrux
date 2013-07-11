@@ -1,29 +1,86 @@
+#wip: search by description, time range
+
 # import standard libraries
 from os import path
 import json
-from tkinter import *
-from tkinter.ttk import *
 
 # import utility libraries
 import recurrent
+from dateutil import parser
 from dateutil import rrule
 from datetime import datetime
+import ago
 
 # import application libraries
-from controls import *
+import controls as tk
+
+class Entry:
+    def __init__(self, description, target=None):
+        r = recurrent.RecurringEvent()
+        self.description = description
+        if target:
+            self.recurring = "RRULE" in target
+            if self.recurring:
+                self.target = target
+            else:
+                self.target = parser.parse(target)
+        else:
+            self.target = r.parse(description)
+            self.recurring = r.is_recurring
+        if self.recurring:
+            self.rule = rrule.rrulestr(self.target, cache=True)
+
+    def occurrence(self):
+        """Returns a datetime representing the next occurrence of the event."""
+        if self.recurring:
+            return self.rule.after(datetime.now()) # obtain next occurrence of recurring rule
+        return self.target
+
+    def occurrence_readable(self):
+        """Returns the next occurrence of the event as a human-readable string."""
+        return ago.human(self.occurrence(), 3)
+
+def bind_tag(tag, *widgets):
+    """Bind a given tag as the first bindtag for each given widget"""
+    for widget in widgets:
+        widget.bindtags((tag,) + widget.bindtags())
+
+def entry_active(event): # called upon hovering or focusing on an entry
+    event.widget.config(style="Active.Entry.TFrame") # set frame as active
+    children = event.widget.winfo_children()
+    label = [x for x in children if x.winfo_class() == "TLabel"][0] # find label in the frame
+    label.config(style="Active.Entry.TLabel") # set label as active
+
+def entry_inactive(event): # called upon stopping of hovering or focusing on an entry
+    event.widget.config(style="Entry.TFrame") # set frame as active
+    children = event.widget.winfo_children()
+    label = [x for x in children if x.winfo_class() == "TLabel"][0] # find label in the frame
+    label.config(style="Entry.TLabel") # set label as active
+
+def update(master, entries):
+    for index, entry in enumerate(entries):
+        text = entry.occurrence_readable()
+        frame = get_entry(master, index)
+        frame.winfo_children()[2]["text"] = text
+    w.after(1000, lambda: update(master, entries))
+    return
 
 def load():
     try:
+        # load the settings from the settings file
         with open(settings, "r") as f:
-            entries = json.load(f)
+            values = json.load(f)
+        entries = []
+        for value in values:
+            entries.append(Entry(value["description"], value["target"]))
         return entries
     except IOError:
-        pass
-    return []
+        return []
 
 def save(entries):
+    values = [{"description": e.description, "target": str(e.target)} for e in entries]
     with open(settings, "w+") as f:
-        json.dump(entries, f)
+        json.dump(values, f, sort_keys=True, indent=4, separators=(",", ": "))
 
 def search():
     self = search
@@ -33,9 +90,11 @@ def search():
         return
     self.previous = value
     if value == "":
-        indicator.config(text="\u25c6")
+        indicator.config(text="+")
     else:
         indicator.config(text="\u25b6")
+    list = [entry.description for entry in entries if value in entry.description]
+    print(list)
 search.previous = ""
 
 def search_handler(event):
@@ -45,25 +104,30 @@ def search_handler(event):
     self.timer = search_box.after(300, search) # start new timer
 search_handler.timer = None
 
-def add_entry(master, description, remaining): # add a new entry to the bottom of the entries list
-    frame = Frame(master, padding=10, style="Entry.TFrame")
-    frame.pack(anchor=NW, fill=X, expand=True, padx=1, pady=1)
+def get_entry(master, index):
+    return master.grid_slaves(index, 0)[0]
+
+def add_entry(master, index, entry): # add a new entry to the bottom of the entries list
+    #entries.append({"description": description, "remaining": remaining}) #wip
+    frame = tk.Frame(master, padding=10, style="Entry.TFrame")
+    frame.grid(row=index, column=0, sticky=tk.NSEW, padx=1, pady=1)
     frame.bind("<Enter>", entry_active)
     frame.bind("<Leave>", entry_inactive)
     frame.bind("<FocusIn>", entry_active)
     frame.bind("<FocusOut>", entry_inactive)
-    label = Label(frame, text=description, style="Entry.TLabel")
-    label.pack(anchor=NW, padx=5, pady=5)
+    label = tk.Label(frame, text=entry.description, style="Entry.TLabel")
+    label.pack(anchor=tk.NW, padx=5, pady=5)
     bind_tag("entry", frame, label) # bind a tag to each element in the entry
     frame.bind_class("entry", "<Return>", expand_entry)
     frame.bind_class("entry", "<Button>", expand_entry)
-    Button(frame, text=remaining).pack(anchor=SE, padx=5, pady=5)
+    tk.Button(frame, text="\u2715", width=2).pack(side=tk.RIGHT)
+    tk.Label(frame, relief=tk.SOLID, padding=5).pack(side=tk.LEFT, padx=5, pady=5)
 
 def expand_entry(event):
     widget = event.widget
     if widget.winfo_class() != "TFrame": # child entry selected
         widget = widget.nametowidget(widget.winfo_parent()) # ensure frame is selected
-    print(widget.winfo_children()[0]["text"])
+    print(get_entry(scroll_area.interior, 0).winfo_children()[0]["text"])
 
 settings = path.join(path.dirname(path.realpath(__file__)), "settings.conf")
 font = "Arial" #wip: check if font is available
@@ -71,38 +135,37 @@ font = "Arial" #wip: check if font is available
 entries = load()
 
 # create window
-w = Tk()
+w = tk.Tk()
 w.title("Picrux")
 w.config(background="white")
 w.protocol("WM_DELETE_WINDOW", w.destroy)
 
 # create scrollable container
-scroll_area = VerticalScrolledFrame(w, borderwidth=1, relief=SOLID)
+scroll_area = tk.VerticalScrolledFrame(w, borderwidth=1, relief=tk.SOLID)
 scroll_area.interior.config(padding=1)
-scroll_area.pack(anchor=NW, fill=BOTH, expand=1, padx=10, pady=10)
+scroll_area.pack(anchor=tk.NW, fill=tk.BOTH, expand=1, padx=10, pady=10)
 
 # add test entries
-for i in range(20):
-    add_entry(scroll_area.interior, "do something %s" % i, "ITEM TIME REMAINING %s" % i)
+for index, entry in enumerate(entries):
+    add_entry(scroll_area.interior, index, entry)
 
 # create search box
-search_box = Entry(w, font=(font, 18), style="Search.TEntry")
-search_box.pack(side=LEFT, fill=X, expand=True, padx=(10, 5), pady=10)
+search_box = tk.Entry(w, font=(font, 18), style="Search.TEntry")
+search_box.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(10, 5), pady=10)
 search_box.bind("<Key>", search_handler)
 
-#indicator = Label(w, text="+", style="Action.TLabel")
-#indicator = Label(w, text="\u25b6", style="Action.TLabel")
-indicator = Label(w, text="\u25c6", style="Action.TLabel")
-indicator.pack(side=RIGHT, padx=(0, 10), pady=(0, 10))
+indicator = tk.Label(w, text="+", style="Action.TLabel", width=1)
+indicator.pack(side=tk.RIGHT, padx=(0, 10), pady=10)
 
 # apply styling to widgets
-s = Style()
+s = tk.Style()
 s.theme_use("clam")
-s.configure("Entry.TFrame", background="white", padding=20, relief=GROOVE)
+s.configure("Entry.TFrame", background="white", padding=20, relief=tk.GROOVE)
 s.configure("Entry.TLabel", font=(font, 18), background="white")
 s.configure("Active.Entry.TFrame", background="#efe5e5")
 s.configure("Active.Entry.TLabel", font=(font, 18), background="#efe5e5")
-s.configure("TButton", font=(font, 8), background="white")
+s.configure("TButton", font=(font, 12), background="#c05050", padding=2)
+s.configure("TLabel", font=(font, 8), background="white")
 s.configure("Search.TEntry", padding=5)
 s.configure("Action.TLabel", font=(font, 32), background="white", padding=0)
 
@@ -112,12 +175,8 @@ w.minsize(w.winfo_width(), w.winfo_height())
 
 search_box.focus()
 
+update(scroll_area.interior, entries)
+
 w.mainloop()
 
 save(entries)
-
-r = recurrent.RecurringEvent()
-value = r.parse("do the laundry every friday at 6")
-if r.is_recurring:
-    value = rrule.rrulestr(value).after(datetime.now()) # obtain next occurence of recurring rule
-print(value)

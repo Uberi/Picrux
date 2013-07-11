@@ -14,3 +14,6 @@ Parser for human readable date and time expressions. Licenced under the Apache L
 
 ### [python-dateutil](http://labix.org/python-dateutil)
 Extensions to the Python `datetime` module for working with time. Licensed under the Simplified BSD license. Several modifications made for usage in Python 3.
+
+### [ago](https://pypi.python.org/pypi/ago/)
+Customizable human readable time deltas. Available under the public domain. Slight modifications made for usage in Python 3.
