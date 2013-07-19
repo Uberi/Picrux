@@ -2,6 +2,14 @@ Picrux
 ======
 Fast, light, elegant, dead simple reminders utility.
 
+Picrux is written in and works with Python 3.3 or above.
+
+Usage
+-----
+Picrux requires tkinter. On certain systems, this may not be available. If this is the case, the `python-tk` package is required.
+
+This program is bundled with all necessary external libraries. Simply run `python3 main.py` to begin.
+
 License
 -------
 Copyright 2013 Anthony Zhang (Uberi)

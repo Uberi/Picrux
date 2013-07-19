@@ -69,33 +69,36 @@ def load():
     try:
         # load the settings from the settings file
         with open(settings, "r") as f:
-            values = json.load(f)
+            result = json.load(f)
         entries = []
-        for value in values:
+        for value in result["entries"]:
             entries.append(Entry(value["description"], value["target"]))
+        search.previous = result["search"]
         return entries
     except IOError:
         return []
 
-def save(entries):
+def save(entries, search):
     values = [{"description": e.description, "target": str(e.target)} for e in entries]
+    result = {"entries": values, "search": search}
     with open(settings, "w+") as f:
-        json.dump(values, f, sort_keys=True, indent=4, separators=(",", ": "))
+        json.dump(result, f, sort_keys=True, indent=4, separators=(",", ": "))
+
+current_search = ""
 
 def search():
-    self = search
+    global current_search
     search_handler.timer = None
     value = search_box.get()
-    if value == self.previous:
+    if value == current_search:
         return
-    self.previous = value
+    current_search = value
     if value == "":
         indicator.config(text="+")
     else:
         indicator.config(text="\u25b6")
     list = [entry.description for entry in entries if value in entry.description]
     print(list)
-search.previous = ""
 
 def search_handler(event):
     self = search_handler
@@ -104,11 +107,15 @@ def search_handler(event):
     self.timer = search_box.after(300, search) # start new timer
 search_handler.timer = None
 
+def add_reminder(index, description):
+    entry = Entry(description)
+    entries.append(entry)
+    add_entry(scroll_area.interior, index, entry)
+
 def get_entry(master, index):
     return master.grid_slaves(index, 0)[0]
 
 def add_entry(master, index, entry): # add a new entry to the bottom of the entries list
-    #entries.append({"description": description, "remaining": remaining}) #wip
     frame = tk.Frame(master, padding=10, style="Entry.TFrame")
     frame.grid(row=index, column=0, sticky=tk.NSEW, padx=1, pady=1)
     frame.bind("<Enter>", entry_active)
@@ -139,35 +146,46 @@ w = tk.Tk()
 w.title("Picrux")
 w.config(background="white")
 w.protocol("WM_DELETE_WINDOW", w.destroy)
+w.rowconfigure(0, weight=1)
+w.columnconfigure(0, weight=1)
 
 # create scrollable container
 scroll_area = tk.VerticalScrolledFrame(w, borderwidth=1, relief=tk.SOLID)
 scroll_area.interior.config(padding=1)
-scroll_area.pack(anchor=tk.NW, fill=tk.BOTH, expand=1, padx=10, pady=10)
+scroll_area.interior.columnconfigure(0, weight=1)
+scroll_area.grid(row=0, sticky=tk.NSEW, padx=10, pady=10)
 
 # add test entries
 for index, entry in enumerate(entries):
     add_entry(scroll_area.interior, index, entry)
 
+area = tk.Frame(w, style="Container.TFrame")
+area.grid(row=1, sticky=tk.NSEW, padx=10, pady=(0, 10))
+area.columnconfigure(0, weight=1)
+
 # create search box
-search_box = tk.Entry(w, font=(font, 18), style="Search.TEntry")
-search_box.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(10, 5), pady=10)
+search_box = tk.Entry(area, font=(font, 18), style="Search.TEntry")
+search_box.insert(0, search.previous)
+search_box.grid(row=0, column=0, sticky=tk.NSEW)
 search_box.bind("<Key>", search_handler)
 
-indicator = tk.Label(w, text="+", style="Action.TLabel", width=1)
-indicator.pack(side=tk.RIGHT, padx=(0, 10), pady=10)
+indicator = tk.Button(area, text="+", style="Action.TButton", width=2)
+indicator.grid(row=0, column=1, sticky=tk.NSEW, padx=(5, 0))
+indicator.columnconfigure(1, weight=1)
 
 # apply styling to widgets
 s = tk.Style()
 s.theme_use("clam")
+s.configure("Container.TFrame", background="white")
 s.configure("Entry.TFrame", background="white", padding=20, relief=tk.GROOVE)
 s.configure("Entry.TLabel", font=(font, 18), background="white")
 s.configure("Active.Entry.TFrame", background="#efe5e5")
 s.configure("Active.Entry.TLabel", font=(font, 18), background="#efe5e5")
 s.configure("TButton", font=(font, 12), background="#c05050", padding=2)
+s.map("TButton", background=[("pressed", "#f50202"), ("active", "#f50202"), ("focus", "#f50202")])
 s.configure("TLabel", font=(font, 8), background="white")
 s.configure("Search.TEntry", padding=5)
-s.configure("Action.TLabel", font=(font, 32), background="white", padding=0)
+s.configure("Action.TButton", font=(font, 32), background="white", padding=0)
 
 # set minimum size of the window to current size
 w.update()
@@ -179,4 +197,4 @@ update(scroll_area.interior, entries)
 
 w.mainloop()
 
-save(entries)
+save(entries, search.previous)
