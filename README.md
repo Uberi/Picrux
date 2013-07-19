@@ -2,6 +2,14 @@ Picrux
 ======
 Fast, light, elegant, dead simple reminders utility.
 
+License
+-------
+Copyright 2013 Anthony Zhang (Uberi)
+
+This program is licensed under the [GNU Affero General Public License](http://www.gnu.org/licenses/agpl-3.0.html).
+
+Basically, this means everyone is free to use, modify, and distribute the files, as long as these modifications are also licensed the same way.
+
 Credits
 -------
 See links for more information about each individual module used, including descriptions and licensing information.
