@@ -1,0 +1,56 @@
+@import url("base.css");
+
+ul {
+	padding: 0;
+	margin: 0;
+}
+
+.entry {
+	list-style-type: none;
+	display: block;
+	margin: 0.6em;
+	padding: 0.8em;
+	border: solid orange 0.1em;
+	color: white;
+}
+
+@-webkit-keyframes pulse {
+	0% {
+		background: transparent;
+	}
+
+	50% {
+		background: orange;
+	}
+	
+	100% {
+		background: transparent;
+	}
+}
+
+.past {
+	background: orange;
+	-webkit-animation-duration: 3s;
+	-webkit-animation-name: pulse;
+	-webkit-animation-iteration-count: infinite;
+}
+
+.time {
+	font-size: 0.8em;
+	color: grey;
+}
+
+.message {
+	font-size: 2em;
+}
+
+#search_add .CodeMirror {
+	height: auto;
+	padding: 0.5em;
+	border-bottom: solid orange 0.1em;
+	font-size: 2em;
+}
+
+#search_add .CodeMirror-scroll {
+	max-height: 9em;
+}
