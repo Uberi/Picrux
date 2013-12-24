@@ -5,15 +5,6 @@ ul {
 	margin: 0;
 }
 
-.entry {
-	list-style-type: none;
-	display: block;
-	margin: 0.6em;
-	padding: 0.8em;
-	border: solid orange 0.1em;
-	color: white;
-}
-
 @-webkit-keyframes pulse {
 	0% {
 		background: transparent;
@@ -28,6 +19,25 @@ ul {
 	}
 }
 
+.entry, .entry_editing {
+	list-style-type: none;
+	display: block;
+	margin: 0.6em;
+	padding: 0.8em;
+	border: solid orange 0.1em;
+	border-radius: 0.2em;
+	min-height: 3em;
+}
+
+.userTime {
+	float: right;
+	background: black;
+	border: 1px solid orange;
+	padding: 0.5em;
+	border-radius: 0.2em;
+	color: white;
+}
+
 .past {
 	background: orange;
 	-webkit-animation-duration: 3s;
@@ -36,18 +46,29 @@ ul {
 }
 
 .time {
-	font-size: 0.8em;
+	font-size: 0.9em;
 	color: grey;
+	display: inline-block;
 }
 
 .message {
 	font-size: 2em;
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	color: white;
+	word-break: break-all;
+	overflow-wrap: break-word;
+}
+
+.message p {
+	margin: 0.2em;
 }
 
 #search_add .CodeMirror {
 	height: auto;
 	padding: 0.5em;
-	border-bottom: solid orange 0.1em;
+	border-bottom: solid orange 1px;
 	font-size: 2em;
 }
 
