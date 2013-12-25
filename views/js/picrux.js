@@ -1,4 +1,6 @@
-//wip: move the time and settings stuff to the right side in its own pane
+//wip: move the time and settings stuff to the right side in its own pane for each entry
+
+var SERVER_ADDRESS = "http://localhost:222/";
 
 var main = function() {
 	// editor setup
@@ -25,27 +27,13 @@ var main = function() {
 var updateTemporaryEntry = function(userMessage) {
 	var entry = $(".entry_editing");
 	
-	//wip: debug
-	$.get("http://localhost:222/parse_time", userMessage)
-		.done(function(data) {
-			alert(data);
-		})
-		.fail(function(error) {
-			alert(JSON.stringify(error));
-		});
-	
-	// parse time values
-	return //wip: need to make a request to the server to use recurrent to parse it
-	var times = chrono.parse(userMessage);
-	if (times.length > 0) {
-		entry.find(".userTime").val(times[0].text);
-		var timeDue = moment(times[0].startDate).unix();
-		Entry.time(entry, timeDue);
-	}
-	else {
-		entry.find(".userTime").val("")
-		Entry.time(entry, null);
-	}
+	// parse times embedded in the message
+	$.get(SERVER_ADDRESS + "parse_time", userMessage, function(time) {
+		if (time === "")
+			Entry.time(entry, null);
+		else // time value found
+			Entry.time(entry, parseInt(time));
+	}, "text");
 	
 	// convert the markdown to HTML
 	var valueHTML = marked(userMessage, {
@@ -53,7 +41,6 @@ var updateTemporaryEntry = function(userMessage) {
 		smartLists: true, smartypants: true,
 	});
 	entry.find(".message").html(valueHTML);
-	//wip: the temporary entry should allow editing of the time and message separately
 }
 
 // calls `updateTemporaryEntry` when the editor has not changed for a while

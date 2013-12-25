@@ -29,15 +29,6 @@ ul {
 	min-height: 3em;
 }
 
-.userTime {
-	float: right;
-	background: black;
-	border: 1px solid orange;
-	padding: 0.5em;
-	border-radius: 0.2em;
-	color: white;
-}
-
 .past {
 	background: orange;
 	-webkit-animation-duration: 3s;

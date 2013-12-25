@@ -6,7 +6,9 @@ Picrux is written in and works with Python 3.3 or above.
 
 Usage
 -----
-This program is bundled with all necessary external libraries. Simply run `python3 main.py` to begin.
+This program requires PySide. This can be obtained from the [official PySide website](http://qt-project.org/wiki/Get-PySide). There are comprehensive installation instructions on the linked page.
+
+This program is bundled with all necessary external libraries. Simply run `python3 main.py` or `python main.py` to start it.
 
 License
 -------
@@ -23,6 +25,18 @@ See links for more information about each individual module used, including desc
 ### [PySide](http://qt-project.org/wiki/PySide)
 Python bindings for the Qt. LGPL licensed.
 
+### [Recurrent](https://github.com/kvh/recurrent)
+Natural language date and time parsing with support for recurrent events, using "parsedatetime". MIT licensed. A few modifications made for usage in Python 3.
+
+### [parsedatetime](https://github.com/bear/parsedatetime)
+Parser for human readable date and time expressions. Licenced under the Apache License 2.0.
+
+### [python-dateutil](http://labix.org/python-dateutil)
+Extensions to the Python `datetime` module for working with time. Licensed under the Simplified BSD license. Several modifications made for usage in Python 3.
+
+### [ago](https://pypi.python.org/pypi/ago/)
+Customizable human readable time deltas. Available under the public domain. Slight modifications made for usage in Python 3.
+
 ### [jQuery](http://jquery.com/)
 Fast, small, and feature-rich JavaScript library. MIT licensed.
 
@@ -31,9 +45,6 @@ Versatile text editor implemented in JavaScript for the browser. MIT licensed.
 
 ### [marked](https://github.com/chjj/marked)
 Full-featured markdown parser and compiler, written in Javascript. MIT licensed.
-
-### [Chrono](https://github.com/wanasit/chrono)
-Natural language date/time parser, written in Javascript. MIT licensed.
 
 ### [Moment.js](http://momentjs.com/)
 Javascript library impementing various date/time operations. MIT licensed.
