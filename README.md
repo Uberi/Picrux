@@ -1,5 +1,5 @@
-Picrux
-======
+Picrux 0.3
+==========
 Fast, light, elegant, dead simple reminders utility.
 
 Picrux is written in and works with Python 3.3 or above.
@@ -34,9 +34,6 @@ Parser for human readable date and time expressions. Licenced under the Apache L
 ### [python-dateutil](http://labix.org/python-dateutil)
 Extensions to the Python `datetime` module for working with time. Licensed under the Simplified BSD license. Several modifications made for usage in Python 3.
 
-### [ago](https://pypi.python.org/pypi/ago/)
-Customizable human readable time deltas. Available under the public domain. Slight modifications made for usage in Python 3.
-
 ### [jQuery](http://jquery.com/)
 Fast, small, and feature-rich JavaScript library. MIT licensed.
 
@@ -45,6 +42,9 @@ Versatile text editor implemented in JavaScript for the browser. MIT licensed.
 
 ### [marked](https://github.com/chjj/marked)
 Full-featured markdown parser and compiler, written in Javascript. MIT licensed.
+
+### [highlight.js](http://highlightjs.org/)
+Syntax highlighting for a large number of languages, written in Javascript. BSD licensed.
 
 ### [Moment.js](http://momentjs.com/)
 Javascript library impementing various date/time operations. MIT licensed.

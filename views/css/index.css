@@ -1,22 +1,6 @@
-@import url("base.css");
-
 ul {
 	padding: 0;
 	margin: 0;
-}
-
-@-webkit-keyframes pulse {
-	0% {
-		background: transparent;
-	}
-
-	50% {
-		background: orange;
-	}
-	
-	100% {
-		background: transparent;
-	}
 }
 
 .entry, .entry_editing {
@@ -24,22 +8,51 @@ ul {
 	display: block;
 	margin: 0.6em;
 	padding: 0.8em;
-	border: solid orange 0.1em;
-	border-radius: 0.2em;
+	border: solid #b5b0b0 0.1em;
+	border-radius: 0.3em;
 	min-height: 3em;
+	position: relative;
 }
 
-.past {
-	background: orange;
-	-webkit-animation-duration: 3s;
-	-webkit-animation-name: pulse;
-	-webkit-animation-iteration-count: infinite;
+.overlay {
+	z-index: 1;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	display: none;
+	border-radius: 0.2em;
+	pointer-events: none;
+    background-size: 2em 2em;
+    background-image: linear-gradient(45deg, /* stripes effect */
+        rgba(255, 255, 255, .3) 0%, rgba(255, 255, 255, .3) 25%,
+        transparent 25%, transparent 50%,
+        rgba(255, 255, 255, .3) 50%, rgba(255, 255, 255, .3) 75%,
+		transparent 75%, transparent 100%);
+    background-image: -webkit-linear-gradient(45deg, /* stripes effect */
+        rgba(255, 255, 255, .3) 0%, rgba(255, 255, 255, .3) 25%,
+        transparent 25%, transparent 50%,
+        rgba(255, 255, 255, .3) 50%, rgba(255, 255, 255, .3) 75%,
+		transparent 75%, transparent 100%);
+    opacity: 0.3;
+}
+
+.past .overlay {
+	background-color: #dd3333;
+	display: inline-block;
+}
+
+.entry_editing .overlay {
+    background-color: #555555;
+	display: inline-block;
 }
 
 .time {
 	font-size: 0.9em;
 	color: grey;
-	display: inline-block;
+	font-variant: small-caps;
+	text-transform: capitalize;
 }
 
 .message {
@@ -47,22 +60,45 @@ ul {
 	display: block;
 	width: 100%;
 	box-sizing: border-box;
-	color: white;
+	color: #333333;
 	word-break: break-all;
 	overflow-wrap: break-word;
 }
+
+/* markdown content styling */
 
 .message p {
 	margin: 0.2em;
 }
 
+.message pre {
+	margin-left: 2em;
+	border: dashed 0.1em #887777;
+	padding: 0.7em;
+	display: table;
+}
+
+.message blockquote {
+	border-left: solid 0.15em #887777;
+	color: #707070;
+}
+
+/* search/add bar styling */
+
 #search_add .CodeMirror {
 	height: auto;
 	padding: 0.5em;
-	border-bottom: solid orange 1px;
 	font-size: 2em;
+    border-bottom: dashed #8a8585 0.15em;
+    background: #fefaf5;
+    box-shadow: 0 0 0.8em 0 black;
+    -webkit-box-shadow: 0 0 0.8em 0 black;
 }
 
 #search_add .CodeMirror-scroll {
 	max-height: 9em;
+}
+
+#search_add .CodeMirror-placeholder {
+	color: #aab0b0;
 }
