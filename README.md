@@ -2,6 +2,8 @@ Picrux 0.3
 ==========
 Fast, light, elegant, dead simple reminders utility.
 
+![Screenshot](Screenshot.png)
+
 Picrux is written in and works with Python 3.3 or above.
 
 Usage
