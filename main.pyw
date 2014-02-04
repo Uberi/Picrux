@@ -2,6 +2,8 @@
 
 # TODO:
 # * save the contents of the search box and serialized entries
+# * make entirely keyboard operable
+# * Vim keybindings
 
 # standard library modules
 import os, sys, time
