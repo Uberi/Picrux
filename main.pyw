@@ -7,17 +7,12 @@
 
 # standard library modules
 import os, sys, time
-import http.server
 from urllib.parse import urlparse, unquote
 from datetime import datetime
 
 # external modules
 from PySide import QtCore, QtGui, QtWebKit
 from PySide.QtDeclarative import QDeclarativeView
-
-# bundled modules
-from dateutil import rrule
-import recurrent
 
 SETTINGS_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "settings.conf")
 
@@ -35,17 +30,21 @@ class InternalAPI(QtCore.QObject):
     def __init__(self, parent=None):
         super(InternalAPI, self).__init__(parent)
 
-    @QtCore.Slot(str, result=str)
-    def parse_time(self, message):
-        if not message:
-            return ""
-        occurrence = recurrent.RecurringEvent().parse(message)
-        if occurrence == None:
-            return ""
-        if isinstance(occurrence, str):
-            occurrence = rrule.rrulestr(occurrence).after(datetime.now(), True)
-        unix_time = time.mktime(occurrence.utctimetuple())
-        return str(unix_time)
+    @QtCore.Slot(int, str, result=int)
+    def create(self, time, message):
+        return 0 #wip: return the element ID
+
+    @QtCore.Slot(int, result=None)
+    def remove(self, entry):
+        pass #wip
+
+    @QtCore.Slot(int, int, result=None)
+    def time(self, entry, time):
+        pass #wip
+    
+    @QtCore.Slot(int, str, result=None)
+    def message(self, entry, message):
+        pass #wip
 
 class PicruxWindow:
     def __init__(self):

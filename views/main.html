@@ -5,9 +5,12 @@
 		<link rel="StyleSheet" href="css/base.css" type="text/css">
 		<link rel="StyleSheet" href="css/index.css" type="text/css">
 
-		<script src="js/jquery.min.js" type="text/javascript"></script>
-		<script src="js/moment-with-langs.min.js"></script>
-		<script src="js/marked.js"></script>
+		<script src="lib/chrono.min.js" type="text/javascript"></script>
+		<script src="lib/jquery.min.js" type="text/javascript"></script>
+		<script src="lib/moment-with-langs.min.js"></script>
+		<script src="lib/marked.js"></script>
+
+		<script src="js/entry.js"></script>
 		<script src="js/picrux.js"></script>
 
 		<!-- syntax highlighting for Markdown !-->
@@ -47,7 +50,14 @@
             <hr>
             <ul id="items">
                 <li class="entry_editing">
-                    <div class="time"></div>
+                    <label for="times" class="time">in 2 days</label>
+                    <input type="text" list="times">
+                    <datalist id="times">
+                        <option value="sometime">
+                        <option value="eventually">
+                        <option value="soon">
+                        <option value="whenever">
+                    </datalist>
                     <div class="message"></div>
                     <div class="overlay"></div>
                 </li>
