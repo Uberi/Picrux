@@ -6,9 +6,7 @@
 # * Vim keybindings
 
 # standard library modules
-import os, sys, time
-from urllib.parse import urlparse, unquote
-from datetime import datetime
+import os, sys
 
 # external modules
 from PySide import QtCore, QtGui, QtWebKit
@@ -26,7 +24,7 @@ def save(data):
     with open(SETTINGS_FILE, "w+") as f:
         f.write(data)
 
-class InternalAPI(QtCore.QObject):
+class InternalAPI(QtCore.QObject): #wip: save the state every so often on a delay
     def __init__(self, parent=None):
         super(InternalAPI, self).__init__(parent)
 
@@ -38,8 +36,8 @@ class InternalAPI(QtCore.QObject):
     def remove(self, entry):
         pass #wip
 
-    @QtCore.Slot(int, int, result=None)
-    def time(self, entry, time):
+    @QtCore.Slot(int, int, bool, result=None)
+    def time(self, entry, time, delete):
         pass #wip
     
     @QtCore.Slot(int, str, result=None)
@@ -53,7 +51,7 @@ class PicruxWindow:
         # set up window
         self.view = QtWebKit.QWebView()
         api = InternalAPI()
-        self.view.page().mainFrame().addToJavaScriptWindowObject("_python_side_", api)
+        self.view.page().mainFrame().addToJavaScriptWindowObject("_server_side_", api)
         self.view.load(QtCore.QUrl("views/main.html"))
         self.view.setWindowTitle("Picrux v0.3")
         self.view.setWindowIcon(QtGui.QIcon("icon.png"))

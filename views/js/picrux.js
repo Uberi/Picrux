@@ -46,24 +46,26 @@ var main = function() {
 var updateEditingEntry = function(entry, userMessage) {
 	// parse and update times embedded in the message
     var times = chrono.parse(userMessage);
+    var time_list = $("#time_list").empty();
     for (var i = 0; i < times.length; i ++) {
-        alert(times[i].start.date());
+        var start = moment(times[i].startDate);
+        var end = moment(times[i].endDate);
+        time_list.append("<option value=\"" + times[i].text + "\">" + start.fromNow() + "</option>");
         //wip: userline the date text like in gmail
     }
-    Entry.time(entry, null);
-	
-	// convert the markdown to HTML
-	var valueHTML = marked(userMessage, {
-		gfm: true, tables: true, breaks: true, sanitize: false,
-		smartLists: true, smartypants: true,
-	});
-
-	if (valueHTML === "") // entry preview is blank
-		entry.hide();
-	else {
-		entry.show();
-        Entry.message(entry, valueHTML);
+    if (times.length > 0) {
+        $("#time_entry").val(times[0].text);
+        Entry.time(entry, moment(times[0].startDate).unix()); //wip: support time ranges
     }
+    else {
+        $("#time_entry").val(times[0].text);
+        Entry.time(entry, null);
+    }
+    Entry.message(entry, userMessage);
+    
+    // show entry only if there is a message
+	if (Entry.message(entry) === "") entry.hide();
+	else entry.show();
 }
 
 // calls `updateTemporaryEntry` when the editor has not changed for a while
