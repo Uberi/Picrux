@@ -5,21 +5,25 @@ if (typeof _server_side_ === "undefined") {
 	_server_side_ = {
 		create: function() {
 			var counter = 0;
-			return function(time, message) { return counter ++; };
+			return function(time, message, has_time) { return counter ++; };
 		}(),
-		remove: function(id) {},
-		time: function(id, time, remove) {},
-		message: function(id, message) {},
+		remove: function(entry_index) {},
+		time: function(entry_index, time, remove) {},
+		message: function(entry_index, message) {},
 	};
 }
 
 var Entry = {
 	// creates an entry and returns its new DOM element
 	create: function(time, message) {
-		var id = _server_side_.create(time, message);
+		var id;
+		if (time === null)
+			id = _server_side_.create(0, message, false);
+		else
+			id = _server_side_.create(time, message, true);
 		var entry = $("#items").append(
-			"<li class=\"entry\">" +
-				"<div class=\"time\" data-time=\"" + time + "\" data-id=\"" + id + "\"></div>" +
+			"<li class=\"entry\" data-id=\"" + id + "\">" +
+				"<div class=\"time\" data-time=\"" + time + "\"></div>" +
 				"<div class=\"message\">" + message + "</div>" +
 			"</li>");
 		Entry.updateTime(entry);
@@ -34,7 +38,7 @@ var Entry = {
 	time: function(element, newTime) {
 		var value = element.find(".time");
 		if (newTime === null) { // time is to be deleted
-			_server_side_.time(value.data("id"), 0, false);
+			_server_side_.time(element.data("id"), 0, false);
 			value.removeData("time");
 		}
 		else if (!newTime) { // new time not specified, simply produce the timestamp
@@ -44,7 +48,7 @@ var Entry = {
 			return timestamp;
 		}
 		else { //time is to be updated
-			_server_side_.time(value.data("id"), newTime, true);
+			_server_side_.time(element.data("id"), newTime, true);
 			value.data("time", newTime);
 		}
 		Entry.updateTime(element);
@@ -61,7 +65,7 @@ var Entry = {
 			gfm: true, tables: true, breaks: true, sanitize: false, //wip: set it to sanitize if running on the web
 			smartLists: true, smartypants: true,
 		});
-		_server_side_.message(message);
+		_server_side_.message(element.data("id"), message);
 		value.html(valueHTML);
 	},
 	// updates the time display of a given entry

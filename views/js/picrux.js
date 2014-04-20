@@ -2,6 +2,12 @@
 //wip: store data in a database to support larger datasets
 //wip: import from google tasks and whatever
 
+// debugging function
+window.onerror = function(message, url, line) {
+    alert('Error: ' + message + '\nURL: ' + url + '\nLine: ' + line);
+    return true;
+}
+
 var main = function() {
 	// editor setup
 	var editor = CodeMirror.fromTextArea($("#search_add > textarea").get(0), {
@@ -58,14 +64,16 @@ var updateEditingEntry = function(entry, userMessage) {
         Entry.time(entry, moment(times[0].startDate).unix()); //wip: support time ranges
     }
     else {
-        $("#time_entry").val(times[0].text);
+        $("#time_entry").val("");
         Entry.time(entry, null);
     }
-    Entry.message(entry, userMessage);
     
     // show entry only if there is a message
-	if (Entry.message(entry) === "") entry.hide();
-	else entry.show();
+	if (userMessage === "") entry.hide();
+	else {
+        Entry.message(entry, userMessage);
+        entry.show();
+    }
 }
 
 // calls `updateTemporaryEntry` when the editor has not changed for a while
