@@ -50,33 +50,53 @@
             <hr>
             <ul id="items">
                 <li class="entry_editing" data-id="-1">
-                    <label for="times" class="time"></label>
-                    <input type="text" id="time_entry" list="time_list">
-                    <datalist id="time_list"></datalist>
+                    <div class="actions">
+                        <div class="time"></div>
+                        <select id="time_entry"></select>
+                        <div>
+                            <a href="#" class="trash"><div class="lid"></div><div class="can"></div></a>
+                            <a href="#" class="edit"><div class="pencil"></div></a>
+                            <a href="#" class="add">Add</a>
+                        </div>
+                    </div>
                     <div class="message"></div>
                     <div class="overlay"></div>
                 </li>
                 <li class="entry">
-                    <div class="time" data-time="1398517311"></div>
+                    <div class="actions">
+                        <div class="time" data-time="1398517311"></div>
+                        <div>
+                            <a href="#" class="trash"><div class="lid"></div><div class="can"></div></a>
+                            <a href="#" class="edit"><div class="pencil"></div></a>
+                        </div>
+                    </div>
                     <div class="message">Meet someone-or-another somewhere</div>
                     <div class="overlay"></div>
                 </li>
                 <li class="entry">
-                    <div class="time" data-time="1318811876"></div>
+                    <div class="actions">
+                        <div class="time" data-time="1318811876"></div>
+                        <div>
+                            <a href="#" class="trash"><div class="lid"></div><div class="can"></div></a>
+                            <a href="#" class="edit"><div class="pencil"></div></a>
+                        </div>
+                    </div>
                     <div class="message">Do something else</div>
                     <div class="overlay"></div>
                 </li>
                 <li class="entry">
-                    <div class="time" data-time="1418811876"></div>
+                    <div class="actions">
+                        <div class="time" data-time="1418811876"></div>
+                        <div>
+                            <a href="#" class="trash"><div class="lid"></div><div class="can"></div></a>
+                            <a href="#" class="edit"><div class="pencil"></div></a>
+                        </div>
+                    </div>
                     <div class="message">Bla bla bla</div>
                     <div class="overlay"></div>
                 </li>
-                <li class="entry">
-                    <div class="time" data-time="2318811876"></div>
-                    <div class="message">Do it</div>
-                    <div class="overlay"></div>
-                </li>
             </ul>
+            <div id="empty_message" style="display: none;">No reminders! Add new reminders by typing in the top bar.</div>
         </div>
 	</body>
 </html>

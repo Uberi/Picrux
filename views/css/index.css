@@ -8,11 +8,143 @@ ul {
 	display: block;
 	margin: 0.6em;
 	padding: 0.8em;
+    padding-right: 10.5em;
 	border: solid #b5b0b0 0.1em;
 	border-radius: 0.3em;
-	min-height: 3em;
+	min-height: 3.5em;
 	position: relative;
 }
+
+.entry .trash, .entry .edit {
+    opacity: 0;
+    -webkit-transition: all 0.2s linear;
+}
+
+.entry:hover .trash, .entry:hover .edit { opacity: 1; }
+
+.entry_editing {
+    min-height: 5.5em;
+}
+
+#time_entry {
+    background: none;
+    border: solid 1px rgba(128, 128, 128, 0.2);
+    border-radius: 0.5em;
+    margin: 0.5em 0 0.5em 0;
+    width: 13em;
+    padding: 0.5em;
+    font-size: 0.6em;
+    outline: none;
+    -webkit-transition: all 0.2s linear;
+    -webkit-appearance: none;
+    background: url(../img/dropdown.png) no-repeat right center;
+    background-size: 2em 2em;
+}
+
+#time_entry:hover {
+    border-color: gray;
+}
+
+.time {
+	font-size: 0.9em;
+	color: gray;
+	font-variant: small-caps;
+	text-transform: capitalize;
+}
+
+.actions {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0.5em;
+    bottom: 0.5em;
+    width: 9em;
+    padding: 0.3em;
+    padding-left: 0.8em;
+    border-left: solid #b5b0b0 0.1em;
+}
+
+.trash {
+    display: inline-block;
+    margin: 0.2em 0.1em 0 0.1em;
+    padding: 0.3em 0 0.2em 0;
+    border: solid 1px rgba(128, 128, 128, 0.2);
+    border-radius: 0.2em;
+    -webkit-transition: all 0.2s linear;
+}
+
+.trash .lid {
+    width: 24px; height: 9px;
+    background: url(../img/delete.png) no-repeat 0px 0px;
+    background-size: 24px 24px;
+    -webkit-transition: all 0.1s linear;
+}
+
+.trash .can {
+    width: 24px; height: 15px;
+    background: url(../img/delete.png) no-repeat 0px -9px;
+    background-size: 24px 24px;
+}
+
+.trash:hover {
+    border-color: gray;
+}
+
+.trash:hover .lid {
+    -webkit-transform: rotate(-20deg) translate(-1px, -3px);
+}
+
+.edit {
+    display: inline-block;
+    margin: 0.2em 0.1em 0 0.1em;
+    padding: 0.3em 0 0.2em 0;
+    border: solid 1px rgba(128, 128, 128, .2);
+    border-radius: 0.2em;
+    -webkit-transition: all 0.2s linear;
+}
+
+.edit .pencil {
+    width: 24px; height: 24px;
+    background: url(../img/edit.png) no-repeat 0px 0px;
+    background-size: 24px 24px;
+    -webkit-transition: all 0.1s linear;
+}
+
+.edit:hover {
+    border-color: gray;
+}
+
+.edit:hover .pencil {
+    -webkit-transform: rotate(-20deg) translate(1px, -2px);
+}
+
+.add {
+    float: right;
+    border: solid 0.1em rgba(128, 128, 128, 0.2);
+    font-variant: small-caps;
+    font-size: 1.5em;
+    text-decoration: none;
+    color: grey;
+    margin: 0.1em 0.3em;
+    padding: 0.1em 0.25em 0 0.25em;
+    line-height: 1.2em; /* makes the line height consistent acorss browsers */
+    border-radius: 0.2em;
+    -webkit-transition: all 0.2s linear;
+}
+
+.add:hover {
+    border-color: gray;
+}
+
+#empty_message {
+    margin: 0.6em;
+    font-size: 2em;
+    text-align: center;
+    color: grey;
+    font-variant: small-caps;
+}
+
+/* overlay styling */
 
 .overlay {
 	z-index: 1;
@@ -26,14 +158,14 @@ ul {
 	pointer-events: none;
     background-size: 2em 2em;
     background-image: linear-gradient(45deg, /* stripes effect */
-        rgba(255, 255, 255, .3) 0%, rgba(255, 255, 255, .3) 25%,
+        rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.3) 25%,
         transparent 25%, transparent 50%,
-        rgba(255, 255, 255, .3) 50%, rgba(255, 255, 255, .3) 75%,
+        rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.3) 75%,
 		transparent 75%, transparent 100%);
     background-image: -webkit-linear-gradient(45deg, /* stripes effect */
-        rgba(255, 255, 255, .3) 0%, rgba(255, 255, 255, .3) 25%,
+        rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.3) 25%,
         transparent 25%, transparent 50%,
-        rgba(255, 255, 255, .3) 50%, rgba(255, 255, 255, .3) 75%,
+        rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.3) 75%,
 		transparent 75%, transparent 100%);
     opacity: 0.3;
 }
@@ -48,15 +180,10 @@ ul {
 	display: inline-block;
 }
 
-.time {
-	font-size: 0.9em;
-	color: grey;
-	font-variant: small-caps;
-	text-transform: capitalize;
-}
+/* markdown content styling */
 
 .message {
-	font-size: 2em;
+	font-size: 1.5em;
 	display: block;
 	width: 100%;
 	box-sizing: border-box;
@@ -64,8 +191,6 @@ ul {
 	word-break: break-all;
 	overflow-wrap: break-word;
 }
-
-/* markdown content styling */
 
 .message p {
 	margin: 0.2em;
@@ -101,4 +226,8 @@ ul {
 
 #search_add .CodeMirror-placeholder {
 	color: #aab0b0;
+}
+
+#search_add .time_text {
+    text-decoration: underline;
 }

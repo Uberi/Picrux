@@ -39,7 +39,6 @@ Basically, this means everyone is free to use, modify, and distribute the files,
 
 Credits
 -------
-See links for more information about each individual module used, including descriptions and licensing information.
 
 ### [PySide](http://qt-project.org/wiki/PySide)
 Python bindings for the Qt. LGPL licensed.

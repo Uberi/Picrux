@@ -17,22 +17,34 @@ var Entry = {
 	// creates an entry and returns its new DOM element
 	create: function(time, message) {
 		var id;
-		if (time === null)
-			id = _server_side_.create(0, message, false);
-		else
-			id = _server_side_.create(time, message, true);
+		if (time === null) id = _server_side_.create(0, message, false);
+		else id = _server_side_.create(time, message, true);
 		var entry = $("#items").append(
-			"<li class=\"entry\" data-id=\"" + id + "\">" +
-				"<div class=\"time\" data-time=\"" + time + "\"></div>" +
+			"<li class=\"entry_editing\" data-id=\"" + id + "\">" +
+				"<div class=\"actions\">" +
+					"<div class=\"time\" data-time=\"" + time + "\"></div>" +
+					"<div>" +
+						"<a href=\"#\" class=\"trash\"><div class=\"lid\"></div><div class=\"can\"></div></a>" +
+						"<a href=\"#\" class=\"edit\"><div class=\"pencil\"></div></a>" +
+					"</div>" +
+				"</div>" +
 				"<div class=\"message\">" + message + "</div>" +
-			"</li>");
+				"<div class=\"overlay\"></div>" +
+			"</li>"
+		);
 		Entry.updateTime(entry);
 		return entry;
 	},
 	// removes a given entry
 	remove: function(element) {
-		_server_side_.remove(element.data("id"));
-		element.remove();
+		var entry = $(element);
+		_server_side_.remove(entry.data("id"));
+		entry.css("min-height", 0);
+		entry.animate({opacity: 0, height: 0}, 100, function() { //wip: undo prompt
+			entry.remove();
+			if ($("#items .entry").length === 0) $("#empty_message").show();
+			else $("#empty_message").hide();
+		});
 	},
 	// deletes, retrieves, or sets the time of a given entry, returning the UNIX timestamp if retrieving
 	time: function(element, newTime) {
