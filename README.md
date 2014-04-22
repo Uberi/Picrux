@@ -39,24 +39,25 @@ Basically, this means everyone is free to use, modify, and distribute the files,
 
 Credits
 -------
-
-### [PySide](http://qt-project.org/wiki/PySide)
-Python bindings for the Qt. LGPL licensed.
+Alphabetical list of resources used.
 
 ### [Chrono](https://github.com/wanasit/chrono)
 Natural language date parser in Javascript. MIT licensed.
 
-### [jQuery](http://jquery.com/)
-Fast, small, and feature-rich JavaScript library. MIT licensed.
-
 ### [CodeMirror](http://codemirror.net/)
 Versatile text editor implemented in JavaScript for the browser. MIT licensed.
-
-### [marked](https://github.com/chjj/marked)
-Full-featured markdown parser and compiler, written in Javascript. MIT licensed.
 
 ### [highlight.js](http://highlightjs.org/)
 Syntax highlighting for a large number of languages, written in Javascript. BSD licensed.
 
+### [jQuery](http://jquery.com/)
+Fast, small, and feature-rich JavaScript library. MIT licensed.
+
+### [marked](https://github.com/chjj/marked)
+Full-featured markdown parser and compiler, written in Javascript. MIT licensed.
+
 ### [Moment.js](http://momentjs.com/)
 Javascript library impementing various date/time operations. MIT licensed.
+
+### [PySide](http://qt-project.org/wiki/PySide)
+Python bindings for the Qt. LGPL licensed.

@@ -3,7 +3,7 @@ ul {
 	margin: 0;
 }
 
-.entry, .entry_editing {
+.entry, .entry_drafting {
 	list-style-type: none;
 	display: block;
 	margin: 0.6em;
@@ -22,7 +22,7 @@ ul {
 
 .entry:hover .trash, .entry:hover .edit { opacity: 1; }
 
-.entry_editing {
+.entry_drafting {
     min-height: 5.5em;
 }
 
@@ -38,7 +38,9 @@ ul {
     -webkit-transition: all 0.2s linear;
     -webkit-appearance: none;
     background: url(../img/dropdown.png) no-repeat right center;
-    background-size: 2em 2em;
+    background-size: 2em;
+    font-family: inherit;
+    color: gray;
 }
 
 #time_entry:hover {
@@ -175,7 +177,7 @@ ul {
 	display: inline-block;
 }
 
-.entry_editing .overlay {
+.entry_drafting .overlay {
     background-color: #555555;
 	display: inline-block;
 }

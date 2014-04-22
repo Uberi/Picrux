@@ -13,7 +13,7 @@
 		<script src="js/entry.js"></script>
 		<script src="js/picrux.js"></script>
 
-		<!-- syntax highlighting for Markdown !-->
+		<!-- syntax highlighting for Markdown -->
 		<script src="codemirror/lib/codemirror.js"></script>
 		<link rel="stylesheet" href="codemirror/lib/codemirror.css">
 		<script src="codemirror/addon/display/placeholder.js"></script>
@@ -27,7 +27,7 @@
 		<script src="codemirror/mode/clike/clike.js"></script>
 		<link rel="StyleSheet" href="codemirror/theme/paraiso-light.css" type="text/css">
 
-		<!-- additional language support !-->
+		<!-- additional language support -->
 		<script src="codemirror/mode/go/go.js"></script>
 		<script src="codemirror/mode/lua/lua.js"></script>
 		<script src="codemirror/mode/python/python.js"></script>
@@ -49,7 +49,7 @@
             <h1>Reminders</h1>
             <hr>
             <ul id="items">
-                <li class="entry_editing" data-id="-1">
+                <li class="entry_drafting" data-id="-1">
                     <div class="actions">
                         <div class="time"></div>
                         <select id="time_entry"></select>
@@ -62,41 +62,8 @@
                     <div class="message"></div>
                     <div class="overlay"></div>
                 </li>
-                <li class="entry">
-                    <div class="actions">
-                        <div class="time" data-time="1398517311"></div>
-                        <div>
-                            <a href="#" class="trash"><div class="lid"></div><div class="can"></div></a>
-                            <a href="#" class="edit"><div class="pencil"></div></a>
-                        </div>
-                    </div>
-                    <div class="message">Meet someone-or-another somewhere</div>
-                    <div class="overlay"></div>
-                </li>
-                <li class="entry">
-                    <div class="actions">
-                        <div class="time" data-time="1318811876"></div>
-                        <div>
-                            <a href="#" class="trash"><div class="lid"></div><div class="can"></div></a>
-                            <a href="#" class="edit"><div class="pencil"></div></a>
-                        </div>
-                    </div>
-                    <div class="message">Do something else</div>
-                    <div class="overlay"></div>
-                </li>
-                <li class="entry">
-                    <div class="actions">
-                        <div class="time" data-time="1418811876"></div>
-                        <div>
-                            <a href="#" class="trash"><div class="lid"></div><div class="can"></div></a>
-                            <a href="#" class="edit"><div class="pencil"></div></a>
-                        </div>
-                    </div>
-                    <div class="message">Bla bla bla</div>
-                    <div class="overlay"></div>
-                </li>
             </ul>
-            <div id="empty_message" style="display: none;">No reminders! Add new reminders by typing in the top bar.</div>
+            <div id="empty_message">No reminders! Add reminders by typing in the top bar.</div>
         </div>
 	</body>
 </html>

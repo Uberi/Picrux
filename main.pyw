@@ -18,10 +18,12 @@ import entry_persistence
 class InternalAPI(QtCore.QObject): #wip: save the state every so often on a delay
     def __init__(self, parent=None):
         super(InternalAPI, self).__init__(parent)
-        self.entries = entry_persistence.load()
-        self.index = 0
 
-    @QtCore.Slot(int, str, result=str)
+        self.entries = entry_persistence.load()
+        if len(self.entries) == 0: self.index = 0
+        else: self.index = max(self.entries, key=lambda entry: entry["index"])["index"] + 1
+
+    @QtCore.Slot(int, str, bool, result=str)
     def create(self, time, message, has_time):
         self.entries.append({"index": self.index, "time": time if has_time else None, "message": message})
         self.index += 1
@@ -30,19 +32,26 @@ class InternalAPI(QtCore.QObject): #wip: save the state every so often on a dela
 
     @QtCore.Slot(int, result=None)
     def remove(self, entry_index):
-        self.entries = [entry for entry in self.entries if entry["index"] != entry_index]
+        for i, entry in enumerate(self.entries):
+            if entry["index"] == entry_index:
+                del self.entries[i]
+                break
         entry_persistence.deferred_save(self.entries)
 
     @QtCore.Slot(int, int, bool, result=None)
     def time(self, entry_index, time, delete):
-        entry = next((entry for entry in self.entries if entry["index"] == entry_index), {}) #wip: handle nonexistant indices
-        entry["time"] = None if delete else time
+        for i, entry in enumerate(self.entries):
+            if entry["index"] == entry_index:
+                entry["time"] = None if delete else time
+                break
         entry_persistence.deferred_save(self.entries)
 
     @QtCore.Slot(int, str, result=None)
     def message(self, entry_index, message):
-        entry = next((entry for entry in self.entries if entry["index"] == entry_index), {}) #wip: handle nonexistant indices
-        entry["message"] = message
+        for i, entry in enumerate(self.entries):
+            if entry["index"] == entry_index:
+                entry["message"] = message
+                break
         entry_persistence.deferred_save(self.entries)
 
 class PicruxWindow:
