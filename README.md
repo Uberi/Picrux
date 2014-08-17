@@ -27,7 +27,7 @@ Picrux is written in and works with Python 3.3 or above.
 
 This program requires PySide. This can be obtained from the [official PySide website](http://qt-project.org/wiki/Get-PySide). There are comprehensive installation instructions on the linked page.
 
-This program is bundled with all necessary external libraries. Simply run `python3 main.py` or `python main.py` to start it.
+This program is bundled with all other needed external libraries. Simply run `python3 main.py` or `python main.py` to start it.
 
 License
 -------
@@ -40,6 +40,9 @@ Basically, this means everyone is free to use, modify, and distribute the files,
 Credits
 -------
 Alphabetical list of resources used.
+
+### [Chosen](https://github.com/harvesthq/chosen)
+Custom jQuery select controls with many user-friendly options. MIT licensed.
 
 ### [Chrono](https://github.com/wanasit/chrono)
 Natural language date parser in Javascript. MIT licensed.

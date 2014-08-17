@@ -26,25 +26,28 @@ ul {
     min-height: 5.5em;
 }
 
-#time_entry {
-    background: none;
-    border: solid 1px rgba(128, 128, 128, 0.2);
-    border-radius: 0.5em;
-    margin: 0.5em 0 0.5em 0;
-    width: 13em;
-    padding: 0.5em;
-    font-size: 0.6em;
-    outline: none;
-    -webkit-transition: all 0.2s linear;
-    -webkit-appearance: none;
-    background: url(../img/dropdown.png) no-repeat right center;
-    background-size: 2em;
-    font-family: inherit;
-    color: gray;
+#time_entry_chosen {
+	margin: 0.5em 0;
 }
 
-#time_entry:hover {
+#time_entry_chosen .chosen-single {
+	color: gray;
+	background: none;
+    border: solid 1px rgba(128, 128, 128, 0.2);
+    border-radius: 0.3em;
+	-webkit-transition: all 0.2s linear;
+	box-shadow: none;
+}
+
+#time_entry_chosen .chosen-single:hover {
     border-color: gray;
+}
+
+#time_entry_chosen .chosen-drop {
+	background: white;
+	border: none;
+	border-radius: 0.2em;
+	box-shadow: none;
 }
 
 .time {

@@ -1,25 +1,16 @@
 // all functions accept jQuery objects as elements and unix time offsets as times
 
-// mock server side for browser testing
-if (typeof _server_side_ === "undefined") {
-	_server_side_ = {
-		create: function() {
-			var counter = 0;
-			return function(time, message, has_time) { return counter ++; };
-		}(),
-		remove: function(entry_index) {},
-		time: function(entry_index, time, remove) {},
-		message: function(entry_index, message) {},
-	};
-}
-
 var Entry = {
 	// creates an entry and returns its new DOM element
 	create: function(time, message) {
 		var id;
 		if (time === null) id = _server_side_.create(0, message, false);
 		else id = _server_side_.create(time, message, true);
-		var entry = $("#items").append(
+		return Entry.add(id, time, message);
+	},
+	// adds an entry and returns its new DOM element
+	add: function(id, time, message) {
+		var entry = $(
 			"<li class=\"entry\" data-id=\"" + id + "\">" +
 				"<div class=\"actions\">" +
 					"<div class=\"time\" data-time=\"" + time + "\"></div>" +
@@ -31,8 +22,9 @@ var Entry = {
 				"<div class=\"message\">" + message + "</div>" +
 				"<div class=\"overlay\"></div>" +
 			"</li>"
-		);
+		).appendTo("#items");
 		Entry.updateTime(entry);
+		$("#empty_message").hide();
 		return entry;
 	},
 	// removes a given entry
@@ -43,6 +35,7 @@ var Entry = {
 		entry.animate({opacity: 0, height: 0}, 100, function() { //wip: show an undo banner
 			entry.remove();
 		});
+		if ($("#items .entry").length === 0) $("#empty_message").show();
 	},
 	// deletes, retrieves, or sets the time of a given entry, returning the UNIX timestamp if retrieving
 	time: function(element, newTime) {
@@ -87,6 +80,7 @@ var Entry = {
 		}
 		else {
 			var time = moment.unix(timestamp);
+			console.log(element);
 			element.find(".time").text(time.fromNow());
 			if (time.isBefore())
 				element.addClass("past");
@@ -94,4 +88,25 @@ var Entry = {
 				element.removeClass("past");
 		}
 	}
+}
+
+// mock server side for browser testing
+if (typeof _server_side_ === "undefined") {
+	_server_side_ = {
+		create: function() {
+			var counter = 0;
+			return function(time, message, has_time) { return counter ++; };
+		}(),
+		add: function(index, time, message, has_time) {},
+		remove: function(entry_index) {},
+		time: function(entry_index, time, remove) {},
+		message: function(entry_index, message) {},
+		catalog: function() { return []; },
+	};
+} else {
+	$(function() {
+		var entries = JSON.parse(_server_side_.catalog());
+		for (var i in entries) // load all entries
+			Entry.add(entries[i].index, entries[i].time, entries[i].message);
+	});
 }

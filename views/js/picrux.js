@@ -1,7 +1,7 @@
-//wip: move the time and settings stuff to the right side in its own pane for each entry
 //wip: store data in a database to support larger datasets
 //wip: import from google tasks and whatever
 //wip: entry_drafting for in-place editing of entries
+//wip: speech recognition input
 
 var editor = null;
 
@@ -53,7 +53,6 @@ var main = function() {
 			element.hide();
 		} else
 			Entry.remove(element.get(0));
-		if ($("#items .entry").length === 0) $("#empty_message").show();
 	});
 
 	// editing handlers
@@ -69,36 +68,48 @@ var main = function() {
 		Entry.create(time, message);
 		editor.setValue("");
 		element.hide();
-		$("#empty_message").hide();
 	});
 
 	if ($("#items .entry").length === 0) $("#empty_message").show();
 	else $("#empty_message").hide();
 }
 
-var updateEditingEntry = function(entry, userMessage) {
+var updateTimeSelect = function(times) {
+	var time_list = $("#time_entry").empty();
+	for (var i = 0; i < times.length; i ++) {
+		var startDate = moment(times[i].startDate);
+		var endDate = moment(times[i].endDate);
+
+		// add an option to select the time
+		time_list.append("<option value=\"" + startDate.unix() + "\">" + times[i].text + "</option>");
+	}
+	time_list.append("<option value=\"\">N/A</option>");
+}
+
+var updateEditorMark = function(editor, times) {
 	// reset marked ranges
 	var doc = editor.getDoc();
 	var marks = doc.getAllMarks();
 	for (var i = 0; i < marks.length; i ++) marks[i].clear();
 
-	// parse and update times embedded in the message
-	var times = chrono.parse(userMessage);
-	var time_list = $("#time_entry").empty();
+	// mark the time strings in the message
 	for (var i = 0; i < times.length; i ++) {
 		var startDate = moment(times[i].startDate);
 		var endDate = moment(times[i].endDate);
 		var humanDate = startDate.fromNow(); //wip: handle ranges
-
-		// add an option to select the time
-		time_list.append("<option value=\"" + startDate.unix() + "\">" + humanDate + "</option>");
 
 		// mark the location in the text where the time was found
 		var startPosition = doc.posFromIndex(times[i].index);
 		var endPosition = doc.posFromIndex(times[i].index + times[i].text.length);
 		doc.markText(startPosition, endPosition, {className: "time_text", title: humanDate});
 	}
-	time_list.append("<option value=\"\">N/A</option>");
+}
+
+var updateEditingEntry = function(entry, userMessage) {
+	// parse and update time strings in the message
+	var times = chrono.parse(userMessage);
+	updateTimeSelect(times);
+	updateEditorMark(editor, times);
 	if (times.length > 0) Entry.time(entry, moment(times[0].startDate).unix()); //wip: support time ranges
 	else Entry.time(entry, null);
 
@@ -107,6 +118,8 @@ var updateEditingEntry = function(entry, userMessage) {
 	else {
 		Entry.message(entry, userMessage);
 		entry.show();
+		var time_list = $("#time_entry");
+		time_list.chosen("destroy").chosen({width: "10.5em"});
 	}
 }
 

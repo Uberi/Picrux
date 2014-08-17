@@ -1,8 +1,9 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # TODO:
 # * save the contents of the search box and serialized entries
 # * make entirely keyboard operable
+# * editing entries
 # * Vim keybindings
 
 # standard library modules
@@ -22,6 +23,11 @@ class InternalAPI(QtCore.QObject): #wip: save the state every so often on a dela
         self.entries = entry_persistence.load()
         if len(self.entries) == 0: self.index = 0
         else: self.index = max(self.entries, key=lambda entry: entry["index"])["index"] + 1
+
+    @QtCore.Slot(result=str)
+    def catalog(self):
+        import json # wip: see if the objects can be directly passed into the javascript
+        return json.dumps(self.entries)
 
     @QtCore.Slot(int, str, bool, result=str)
     def create(self, time, message, has_time):
@@ -60,8 +66,8 @@ class PicruxWindow:
 
         # set up window
         self.view = QtWebKit.QWebView()
-        api = InternalAPI()
-        self.view.page().mainFrame().addToJavaScriptWindowObject("_server_side_", api)
+        self.api = InternalAPI()
+        self.view.page().mainFrame().addToJavaScriptWindowObject("_server_side_", self.api)
         self.view.load(QtCore.QUrl("views/main.html"))
         self.view.setWindowTitle("Picrux v0.3")
         self.view.setWindowIcon(QtGui.QIcon("icon.png"))
@@ -84,4 +90,6 @@ if __name__ == "__main__":
     # start application
     application = QtGui.QApplication(sys.argv)
     window = PicruxWindow()
-    sys.exit(application.exec_())
+    status = application.exec_()
+    entry_persistence.save(window.api.entries)
+    exit(status)

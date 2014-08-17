@@ -1,12 +1,17 @@
 [
     {
-        "time": null,
-        "message": "fgsfdghsfthdgf",
-        "index": 0
+        "index": 1,
+        "time": 1398441600,
+        "message": "wedrgflsdjkhbf on friday"
     },
     {
-        "time": 1398441600,
-        "message": "wedrgflsdjkhbf on friday",
-        "index": 1
+        "index": 2,
+        "time": 1408723200,
+        "message": "fri"
+    },
+    {
+        "index": 3,
+        "time": null,
+        "message": "sdfgsdfgssdfgsd"
     }
 ]
