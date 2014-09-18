@@ -110,7 +110,7 @@ var updateEditingEntry = function(entry, userMessage) {
 	var times = chrono.parse(userMessage);
 	updateTimeSelect(times);
 	updateEditorMark(editor, times);
-	if (times.length > 0) Entry.time(entry, moment(times[0].startDate).unix()); //wip: support time ranges
+	if (times.length > 0) Entry.time(entry, moment(times[0].start.date()).unix()); //wip: support time ranges
 	else Entry.time(entry, null);
 
 	// show entry only if there is a message
